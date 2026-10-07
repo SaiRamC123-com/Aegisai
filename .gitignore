@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.env
+.DS_Store
+venv/
+__pycache__/
+*.pyc
+ml-service/data/*.csv
+ml-service/saved_models/*.joblib
+serviceAccount*.json
+*firebase-adminsdk*.json

@@ -1,0 +1,222 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink-950: #05070d;
+  --color-ink-900: #0a0f1c;
+  --color-ink-800: #101828;
+  --color-ink-700: #1a2438;
+
+  --color-aegis-300: #7dd3fc;
+  --color-aegis-400: #38bdf8;
+  --color-aegis-500: #0ea5e9;
+  --color-violet-glow: #8b5cf6;
+
+  --color-risk-low: #34d399;
+  --color-risk-moderate: #fbbf24;
+  --color-risk-high: #fb923c;
+  --color-risk-critical: #f43f5e;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink-950);
+  color: #e2e8f0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* ---------- Animated aurora background ---------- */
+.aurora {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(14, 165, 233, 0.18), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(139, 92, 246, 0.16), transparent 60%),
+    var(--color-ink-950);
+}
+
+.risk-pulse {
+  animation: markerPulse 1.6s ease-in-out infinite;
+}
+@keyframes markerPulse {
+  0%, 100% { fill-opacity: 0.75; stroke-opacity: 1; }
+  50% { fill-opacity: 0.25; stroke-opacity: 0.4; }
+}
+.aurora .orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  opacity: 0.35;
+  animation: float 14s ease-in-out infinite;
+}
+.aurora .orb-1 { width: 420px; height: 420px; background: #0ea5e9; top: -120px; left: 15%; }
+.aurora .orb-2 { width: 380px; height: 380px; background: #8b5cf6; right: -100px; top: 30%; animation-delay: -5s; }
+.aurora .orb-3 { width: 460px; height: 460px; background: #10b981; bottom: -180px; left: 35%; opacity: 0.2; animation-delay: -9s; }
+.aurora::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(40px, -30px, 0) scale(1.1); }
+}
+
+/* ---------- Glass surfaces ---------- */
+.glass {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 10px 40px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border-radius: 1.25rem;
+}
+.glass-hover {
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.glass-hover:hover {
+  transform: translateY(-3px);
+  border-color: rgba(125, 211, 252, 0.35);
+  box-shadow: 0 18px 50px -14px rgba(14, 165, 233, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Text + glow helpers ---------- */
+.text-gradient {
+  background: linear-gradient(90deg, #7dd3fc, #a78bfa, #34d399, #7dd3fc);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 6s linear infinite;
+}
+@keyframes shine {
+  to { background-position: 200% center; }
+}
+
+.pulse-critical {
+  animation: pulseGlow 1.8s ease-in-out infinite;
+}
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.45); }
+  50% { box-shadow: 0 0 0 12px rgba(244, 63, 94, 0); }
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-risk-low);
+  animation: livePing 1.6s ease-out infinite;
+}
+@keyframes livePing {
+  0% { box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.7); }
+  100% { box-shadow: 0 0 0 10px rgba(52, 211, 153, 0); }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 0.75rem;
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+
+/* ---------- Form controls ---------- */
+.input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.75rem 1rem;
+  color: white;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input::placeholder { color: #64748b; }
+.input:focus {
+  border-color: var(--color-aegis-400);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(135deg, var(--color-aegis-500), var(--color-violet-glow));
+  box-shadow: 0 8px 24px -8px rgba(14, 165, 233, 0.6);
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 30px -8px rgba(139, 92, 246, 0.6); }
+.btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 0.6rem 1rem;
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-ghost:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+
+/* ---------- Leaflet dark theme ---------- */
+.leaflet-container { background: var(--color-ink-900); font-family: inherit; }
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: rgba(10, 15, 28, 0.94);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.leaflet-popup-content-wrapper { border-radius: 0.9rem; }
+.leaflet-control-zoom a {
+  background: rgba(10, 15, 28, 0.9) !important;
+  color: #e2e8f0 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+.dark-tiles {
+  filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9) saturate(0.7);
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 9999px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

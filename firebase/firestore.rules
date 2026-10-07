@@ -1,0 +1,21 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isAdmin() { return signedIn() && request.auth.token.role == "admin"; }
+
+    // The Node server uses the Admin SDK, which bypasses these rules.
+    // They only control direct access from browsers.
+    match /zones/{id} {
+      allow read: if signedIn();
+      allow write: if isAdmin();
+    }
+    match /alerts/{id} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
