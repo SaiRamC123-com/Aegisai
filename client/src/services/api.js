@@ -11,16 +11,17 @@ api.interceptors.request.use(async (config) => {
   if (user) config.headers.Authorization = `Bearer ${await user.getIdToken()}`;
   return config;
 });
-
 api.interceptors.response.use(
   (res) => res,
   (err) => {
+    const raw = err.response?.data?.error;
     err.userMessage =
-      err.response?.data?.error ||
+      (typeof raw === "string" ? raw : raw?.message) ||
       (err.code === "ECONNABORTED" ? "Request timed out" : "Cannot reach the server");
     return Promise.reject(err);
   }
 );
+
 
 const unwrap = (promise) => promise.then((res) => res.data);
 
