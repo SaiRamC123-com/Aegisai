@@ -23,7 +23,23 @@ process.on("uncaughtException", (err) => {
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+const allowedOrigins = (process.env.CLIENT_URL || "")
+  .split(",")
+  .map((s) => s.trim().replace(/\/$/, ""))
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (!origin) return cb(null, true);
+      const ok =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/aegisai-[a-z0-9-]+-sai-ram-c-s-projects\.vercel\.app$/.test(origin);
+      cb(null, ok);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json({ limit: "1mb" }));
 app.use(morgan("dev"));
 app.use("/api", apiLimiter);
